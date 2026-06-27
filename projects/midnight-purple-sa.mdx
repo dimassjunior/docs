@@ -4,39 +4,43 @@ sidebarTitle: "Midnight Purple SA"
 description: "Midnight Purple SA is an independent fork of Multi Theft Auto: San Andreas that adds the FMOD audio engine for advanced 3D audio, reverb, DSP effects, and vehicle sound simulation."
 ---
 
-Midnight Purple SA is an independent fork of [Multi Theft Auto: San Andreas](https://multitheftauto.com/) that layers the **FMOD Core API** on top of the existing BASS audio stack. The project exists to bring studio-grade spatial audio — full 3D positioning, environmental reverb, per-channel DSP, and realistic vehicle engine simulation — into MTA:SA servers without breaking a single existing script. The core design principle is simple: **BASS remains completely untouched**. Every sound, stream, and effect written against the standard MTA audio API continues to work exactly as before; FMOD is an entirely additive layer exposed through a new set of `fmod*` Lua globals.
+Midnight Purple SA is an independent fork of [Multi Theft Auto: San Andreas](https://multitheftauto.com/) that layers the **FMOD Core API** on top of the existing BASS audio stack. The project exists to bring studio-grade spatial audio — full 3D positioning, environmental reverb, per-channel DSP, and realistic vehicle engine simulation — into MTA:SA servers without breaking a single existing script. The core design principle is straightforward: **BASS remains completely untouched**. Every sound, stream, and effect written against the standard MTA audio API continues to work exactly as before; FMOD is an entirely additive layer exposed through a new set of `fmod*` Lua globals.
+
+<Warning>
+  This fork is not affiliated with, endorsed by, or supported by the Multi Theft Auto team. Grand Theft Auto and all related trademarks are © Rockstar North 1997–2026. Multi Theft Auto is © the Multi Theft Auto team.
+</Warning>
 
 ## What's New
 
 ### FMOD Audio Engine
 
-The heart of Midnight Purple SA is `CFMODManager`, a C++ singleton that wraps the FMOD Core API and drives the entire audio subsystem:
+Midnight Purple SA replaces the default audio experience with a fully integrated FMOD Core layer running alongside the existing BASS stack:
 
-- **Frame-accurate updates** — `CFMODManager` is ticked every game frame, keeping 3D listener position, velocity, and orientation in sync with the local player camera.
-- **Right-handed coordinate system** — The FMOD world is configured in right-handed mode with axes remapped to match GTA:SA's coordinate space, so positions passed from Lua land exactly where you expect them in the world.
-- **Three-tier channel hierarchy** — A single master `ChannelGroup` owns three sub-groups — **SFX**, **Ambient**, and **Music** — giving server-side scripts independent volume control over each category without affecting the others.
-- **Automatic cleanup and resource tracking** — Every sound handle is associated with the resource that created it. When a resource stops, all of its FMOD channels are released automatically; there are no leaks and no manual teardown required.
-- **Pop-free 3D sound start** — Sounds are loaded and created in a *paused* state. All 3D attributes (position, velocity, cone) are applied before the channel is unpaused, eliminating the one-frame positional pop that occurs when attributes are set after playback has already begun.
+- **Frame-accurate 3D updates** — Listener position, velocity, and orientation are kept in sync with the local player camera every game frame, so 3D sounds always feel anchored to the world.
+- **Matched coordinate space** — The FMOD world is configured to match GTA:SA's coordinate system, meaning positions passed from Lua land exactly where you expect them in-game.
+- **Three independent volume categories** — Server-side scripts can control SFX, Ambient, and Music volume independently, without affecting other categories.
+- **Automatic resource cleanup** — Every sound handle is tied to the resource that created it. When a resource stops, all of its FMOD audio is released automatically with no manual teardown needed.
+- **Pop-free 3D sound start** — Sounds are prepared in a paused state with all 3D attributes applied before playback begins, eliminating the positional pop that can occur with naive implementations.
 
 ## Key Highlights
 
 <CardGroup cols={2}>
-  <Card title="FMOD + BASS" icon="music">
+  <Card title="FMOD + BASS" icon="music" href="/midnight-purple/introduction">
     Dual audio stack. FMOD adds advanced features without touching existing BASS scripts — full backward compatibility is guaranteed.
   </Card>
-  <Card title="3D Spatial Audio" icon="volume-high">
+  <Card title="3D Spatial Audio" icon="volume-high" href="/midnight-purple/introduction">
     Full 3D positioning with Doppler shift, distance attenuation curves, and occlusion so sounds behave realistically in the game world.
   </Card>
-  <Card title="Environmental Reverb" icon="waveform-lines">
+  <Card title="Environmental Reverb" icon="waveform-lines" href="/midnight-purple/api/reverb-dsp">
     23 built-in reverb presets — from small room and hallway to open cave and underwater — applied globally or per sound source.
   </Card>
-  <Card title="DSP Effects" icon="sliders">
+  <Card title="DSP Effects" icon="sliders" href="/midnight-purple/api/reverb-dsp">
     Echo, low-pass, high-pass, flanger, chorus, and distortion effects configurable per channel at runtime via Lua.
   </Card>
-  <Card title="Vehicle Audio" icon="car">
+  <Card title="Vehicle Audio" icon="car" href="/midnight-purple/introduction">
     Engine sound simulation with rev limiter behaviour, gear-shift audio cues, and exhaust audio positioned in 3D space relative to the vehicle.
   </Card>
-  <Card title="Lua API" icon="code">
+  <Card title="Lua API" icon="code" href="/midnight-purple/api/sound-lifetime">
     Full suite of `fmod*` globals available client-side in any resource — no extra dependencies, no custom meta tags required.
   </Card>
 </CardGroup>
@@ -44,10 +48,6 @@ The heart of Midnight Purple SA is `CFMODManager`, a C++ singleton that wraps th
 ## Current Version
 
 The upstream MTA:SA codebase is synced to **2026-05-16**. The fork is distributed under the version label **Midnight Purple 1.7**. Release notes and changelog entries for each version are tracked in the repository.
-
-<Warning>
-  This fork is not affiliated with, endorsed by, or supported by the Multi Theft Auto team. Grand Theft Auto and all related trademarks are © Rockstar North 1997–2026. Multi Theft Auto is © the Multi Theft Auto team.
-</Warning>
 
 ## Explore the Docs
 

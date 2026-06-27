@@ -12,7 +12,7 @@ This page covers environmental reverb and per-channel DSP effects. Reverb preset
 
 ### `fmodSetReverbPreset(preset)`
 
-Set the global reverb environment. The preset affects all channels that have been opted in via [`fmodSetChannelReverb`](#fmodsetchannekreverb-channelid-wetdb).
+Set the global reverb environment. The preset affects all channels that have been opted in via [`fmodSetChannelReverb`](#fmodsetchannelreverb-channelid-wetdb).
 
 **Parameters**
 
@@ -124,6 +124,10 @@ Remove the echo DSP from the specified channel.
 
 **Returns** `bool`
 
+```lua
+fmodRemoveChannelEcho(voiceCh)
+```
+
 ---
 
 ### `fmodSetChannelLowPass(channelId, cutoffHz [, resonance])`
@@ -158,6 +162,10 @@ Remove the low-pass filter from the specified channel.
 
 **Returns** `bool`
 
+```lua
+fmodRemoveChannelLowPass(engineCh)
+```
+
 ---
 
 ### `fmodSetChannelHighPass(channelId, cutoffHz [, resonance])`
@@ -175,7 +183,7 @@ Attenuate frequencies below `cutoffHz`. Use this to thin out low end, simulate r
 **Returns** `bool`
 
 ```lua
-fmodSetChannelHighPass(radioCh, 300)  -- thin out low end
+fmodSetChannelHighPass(radioCh, 300)  -- thin out low end for radio effect
 ```
 
 ---
@@ -191,6 +199,10 @@ Remove the high-pass filter from the specified channel.
 | `channelId` | integer | Target channel handle. |
 
 **Returns** `bool`
+
+```lua
+fmodRemoveChannelHighPass(radioCh)
+```
 
 ---
 
@@ -227,6 +239,10 @@ Remove the flanger DSP from the specified channel.
 
 **Returns** `bool`
 
+```lua
+fmodRemoveChannelFlanger(ch)
+```
+
 ---
 
 ### `fmodSetChannelChorus(channelId, mix, depth, rate)`
@@ -262,6 +278,10 @@ Remove the chorus DSP from the specified channel.
 
 **Returns** `bool`
 
+```lua
+fmodRemoveChannelChorus(vocalCh)
+```
+
 ---
 
 ### `fmodSetChannelDistortion(channelId, level)`
@@ -294,6 +314,10 @@ Remove the distortion DSP from the specified channel.
 | `channelId` | integer | Target channel handle. |
 
 **Returns** `bool`
+
+```lua
+fmodRemoveChannelDistortion(engineCh)
+```
 
 ---
 

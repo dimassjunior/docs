@@ -1,13 +1,13 @@
 ---
-title: "Midnight Purple SA Roadmap & Completed Features"
+title: "Midnight Purple SA Roadmap: Audio Features and Plans"
 sidebarTitle: "Roadmap"
-description: "Full list of completed and planned features for Midnight Purple SA, including Doppler, streaming audio, DSP effects, vehicle audio, and occlusion."
+description: "Track what has shipped and what is planned for Midnight Purple SA, covering DSP effects, vehicle audio, spatial features, and network sync."
 ---
 
-Midnight Purple SA has grown from a minimal FMOD integration into a full-featured spatial audio system covering DSP effect chains, per-vehicle sound simulation, raycasted occlusion, and server-driven playback sync. The sections below catalogue every feature that has shipped in the current build, grouped by subsystem.
+Midnight Purple SA has grown from a minimal FMOD integration into a full-featured spatial audio system covering DSP effect chains, per-vehicle sound simulation, raycasted occlusion, and server-driven playback sync. The sections below catalogue every feature that has shipped in the current build, grouped by subsystem, followed by the planned work ahead.
 
 <Note>
-  All listed features are fully implemented in the current build. The version label in-game reads **Midnight Purple 1.7** (upstream base synced 2026-05-16).
+  All listed features in the Completed section are fully implemented in the current build. The version label in-game reads **Midnight Purple 1.7** (upstream base synced 2026-05-16).
 </Note>
 
 ## Completed Features
@@ -51,3 +51,32 @@ Midnight Purple SA has grown from a minimal FMOD integration into a full-feature
 ### Miscellaneous
 
 - ✅ **Version label** — in-game version string updated to **Midnight Purple 1.7**
+
+## Planned Features
+
+The following items are under active consideration or development for future releases. Nothing listed here is guaranteed or committed to a specific version.
+
+### Core Audio
+
+- 🔲 **`fmodSetChannelPitch`** — expose per-channel pitch control as a dedicated Lua function independent of Doppler
+- 🔲 **Seek / playback position** — `fmodSetChannelPosition` and `fmodGetChannelPosition` for scrubbing within a stream or sample
+- 🔲 **Fade helpers** — timed fade-in and fade-out utilities built on top of the existing volume API
+
+### DSP & Effects
+
+- 🔲 **Reverb zones** — trigger a reverb preset on all channels within a defined world-space sphere, driven by `fmodSetReverbProperties`
+- 🔲 **DSP parameter control** — expose individual parameter knobs (e.g. chorus depth, LPF cutoff) via `fmodSetEffectParameter`
+
+### Spatial Audio
+
+- 🔲 **Geometry occlusion API** — register static mesh faces with FMOD's geometry engine so occlusion is computed natively rather than through raycasts
+- 🔲 **Early reflections** — per-room early reflection settings for indoor environments (warehouses, tunnels) without requiring a full reverb preset
+
+### Vehicle Audio
+
+- 🔲 **Tyre / road-surface sounds** — material-aware tyre noise routed through a dedicated FMOD channel with per-surface DSP presets
+- 🔲 **Wind noise channel** — speed-proportional wind audio with high-frequency roll-off at low speeds
+
+### Network & Sync
+
+- 🔲 **Reliable playback sync** — sequence numbers and client-side drift correction for `fmod_sync` to keep long ambient loops aligned across players

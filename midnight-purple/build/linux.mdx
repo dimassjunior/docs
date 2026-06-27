@@ -1,5 +1,5 @@
 ---
-title: "Build Midnight Purple SA Server on Linux"
+title: "How to Build the Midnight Purple SA Server on Linux"
 sidebarTitle: "Linux Build"
 description: "How to build the Midnight Purple SA dedicated server on Linux. Supports x86, x64, arm, and arm64 architectures with configurable debug/release builds."
 ---
@@ -35,17 +35,13 @@ Use the `linux-build.sh` script from the repository root to compile the server:
 ./linux-build.sh --arch=arm64
 ```
 
-## Install Runtime Data
+## Install Runtime Data *(optional)*
 
-After a successful build, run the data-installation script to copy runtime data files to the output directory:
+After a successful build, you can run the data-installation script to copy runtime data files to the output directory:
 
 ```bash
 ./linux-install-data.sh
 ```
-
-<Note>
-  The Linux build produces the **MTA:SA dedicated server only**. The game client (with FMOD audio features) runs on Windows.
-</Note>
 
 ## License
 

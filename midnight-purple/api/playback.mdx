@@ -4,7 +4,7 @@ sidebarTitle: "Playback"
 description: "Lua API reference for FMOD playback in Midnight Purple SA. Covers fmodPlaySound, fmodStopSound, fmodPauseSound, fmodResumeSound, and state-query functions."
 ---
 
-This page covers playback control functions — spawning channels from loaded sounds, stopping, pausing, resuming, and querying playback state. All functions are available client-side. Channel IDs are plain integers managed by `CFMODManager` and are invalidated once the channel finishes or is stopped. All functions return `false` on failure; use `fmodGetLastError()` to retrieve the error code and description.
+This page covers playback control functions — spawning channels from loaded sounds, stopping, pausing, resuming, and querying playback state. All functions are available client-side. Channel IDs are plain integers that are invalidated once the channel finishes or is stopped. All functions return `false` on failure; use `fmodGetLastError()` to retrieve the error code and description.
 
 ---
 
@@ -41,7 +41,7 @@ Spawn a playing instance of a loaded sound asset. Each call produces an independ
 </ParamField>
 
 <ResponseField name="channelId" type="integer | false">
-  An integer channel ID managed by `CFMODManager`, or `false` on failure.
+  An integer channel ID on success, or `false` on failure.
 </ResponseField>
 
 **2D (non-spatialized) example:**
@@ -76,7 +76,10 @@ Stop a channel immediately and release it. The channel ID is invalidated after t
 </ResponseField>
 
 ```lua
-fmodStopSound(ch)
+local ok = fmodStopSound(ch)
+if not ok then
+  outputDebugString("[FMOD] fmodStopSound failed.")
+end
 ```
 
 ---
@@ -97,6 +100,11 @@ Pause a channel without releasing it. The channel ID remains valid and the chann
   `true` on success, `false` on failure.
 </ResponseField>
 
+```lua
+fmodPauseSound(musicCh)
+outputChatBox("Music paused.")
+```
+
 ---
 
 ## fmodResumeSound
@@ -114,6 +122,11 @@ Resume a previously paused channel from where it left off. Has no effect if the 
 <ResponseField name="result" type="bool">
   `true` on success, `false` on failure.
 </ResponseField>
+
+```lua
+fmodResumeSound(musicCh)
+outputChatBox("Music resumed.")
+```
 
 ---
 
@@ -133,6 +146,12 @@ Query whether a channel is currently paused.
   `true` if the channel is paused, `false` otherwise (including on failure).
 </ResponseField>
 
+```lua
+if fmodIsSoundPaused(musicCh) then
+  outputChatBox("Music is currently paused.")
+end
+```
+
 ---
 
 ## fmodIsSoundPlaying
@@ -141,7 +160,7 @@ Query whether a channel is currently paused.
 fmodIsSoundPlaying(channelId)
 ```
 
-Query whether a channel is still active and not paused. Returns `false` for channels that have finished playing and been cleaned up, making this safe to use as a validity guard.
+Query whether a channel is still active and not paused. Returns `false` for channels that have finished playing or been stopped, making this safe to use as a validity guard before calling other channel functions.
 
 <ParamField path="channelId" type="integer" required>
   The channel ID to query.
@@ -150,6 +169,12 @@ Query whether a channel is still active and not paused. Returns `false` for chan
 <ResponseField name="result" type="bool">
   `true` if the channel is active and playing, `false` if it is paused, finished, or invalid.
 </ResponseField>
+
+```lua
+if fmodIsSoundPlaying(engineChannel) then
+  outputChatBox("Engine sound is playing.")
+end
+```
 
 ---
 
@@ -164,5 +189,5 @@ end
 ```
 
 <Tip>
-  Use `fmodIsSoundPlaying` to guard against operating on finished channels. Channels are automatically cleaned up each frame when they finish playing — reading a stale channel ID is safe (it returns `false`) but calling mutating functions on one is a no-op that will set an error retrievable via `fmodGetLastError()`.
+  Use `fmodIsSoundPlaying` to guard against operating on finished channels. Once a channel finishes playing it becomes invalid — reading a stale channel ID is safe (it returns `false`) but calling mutating functions on one is a no-op that will set an error retrievable via `fmodGetLastError()`.
 </Tip>

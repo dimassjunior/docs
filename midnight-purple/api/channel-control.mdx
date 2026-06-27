@@ -14,7 +14,7 @@ These functions give you fine-grained control over individual sound channels —
 fmodSetSoundVolume(channelId, volume)
 ```
 
-Set the volume of a channel. Range is `0.0` (silent) to `1.0` (full volume). Values are clamped to this range internally by FMOD.
+Set the volume of a channel. Range is `0.0` (silent) to `1.0` (full volume). Values are clamped to this range internally.
 
 <ParamField path="channelId" type="integer" required>
   The channel handle returned by a play function (e.g. `fmodPlaySound`).
@@ -188,7 +188,7 @@ end
 fmodSetSoundVelocity(channelId, vx, vy, vz)
 ```
 
-Set the world-space velocity vector of a channel for Doppler pitch shift simulation. Higher velocity relative to the listener produces a Doppler effect — sounds approaching the listener pitch up, and sounds moving away pitch down. Scale the raw MTA velocity values to game units as needed.
+Set the world-space velocity vector of a channel for Doppler pitch shift simulation. Sounds approaching the listener pitch up, and sounds moving away pitch down. Scale the raw MTA velocity values to game units as needed.
 
 <ParamField path="channelId" type="integer" required>
   The 3D channel handle to update.
@@ -225,7 +225,7 @@ fmodSetSoundVelocity(engineCh, vx * 50, vy * 50, vz * 50)  -- scale to game unit
 fmodSetSoundLooped(channelId, loop)
 ```
 
-Change the loop mode on a live channel without restarting playback. Applies the FMOD `FMOD_LOOP_NORMAL` or `FMOD_LOOP_OFF` mode depending on the `loop` argument.
+Change the loop mode on a live channel without restarting playback.
 
 <ParamField path="channelId" type="integer" required>
   The channel handle to modify.
@@ -279,14 +279,14 @@ end
 fmodSetChannelOcclusion(channelId, directOcclusion [, reverbOcclusion])
 ```
 
-Apply geometry-aware muffling using FMOD's native `set3DOcclusion`. `directOcclusion` controls how much the direct signal is attenuated — `0.0` means no occlusion and `1.0` means the sound is fully blocked. FMOD applies a frequency-dependent low-pass filter internally so occluded sounds become muffled rather than simply quieter, producing a realistic through-wall effect. The optional `reverbOcclusion` parameter independently attenuates the reverb send level.
+Apply geometry-aware muffling to a channel. `directOcclusion` controls how much the direct signal is attenuated — `0.0` means no occlusion and `1.0` means the sound is fully blocked. Occluded sounds become muffled rather than simply quieter, producing a realistic through-wall effect. The optional `reverbOcclusion` parameter independently attenuates the reverb send level.
 
 <ParamField path="channelId" type="integer" required>
   The channel handle to apply occlusion to.
 </ParamField>
 
 <ParamField path="directOcclusion" type="number" required>
-  Direct signal attenuation in the range `0.0` (no occlusion) to `1.0` (fully blocked). FMOD applies a low-pass filter at higher values.
+  Direct signal attenuation in the range `0.0` (no occlusion) to `1.0` (fully blocked).
 </ParamField>
 
 <ParamField path="reverbOcclusion" type="number">

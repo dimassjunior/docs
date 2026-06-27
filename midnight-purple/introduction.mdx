@@ -1,7 +1,7 @@
 ---
 title: "Midnight Purple SA: Advanced FMOD Audio for MTA:SA"
 sidebarTitle: "Introduction"
-description: "Midnight Purple SA extends Multi Theft Auto: San Andreas with the FMOD audio engine, enabling 3D spatial audio, environmental reverb, DSP effects, and vehicle sound simulation via Lua."
+description: "Midnight Purple SA adds the FMOD audio engine to MTA:SA, giving Lua scripters 3D spatial audio, DSP effects, reverb, and vehicle sound simulation."
 ---
 
 Midnight Purple SA is an independent fork of Multi Theft Auto: San Andreas (MTA:SA) that layers the **FMOD Core API** on top of the existing BASS audio stack. Every existing MTA audio function — `playSound`, `playSound3D`, `setSoundVolume`, and the rest — continues to work exactly as before. FMOD is purely **additive**: a second, fully independent engine exposed through new `fmod*` Lua globals available on the client side, giving scripters access to advanced spatial audio, DSP effect chains, environmental reverb, and vehicle sound simulation without touching a single line of existing code.
@@ -12,11 +12,7 @@ Midnight Purple SA is an independent fork of Multi Theft Auto: San Andreas (MTA:
 
 ## FMOD Audio Engine
 
-The FMOD integration is managed by **CFMODManager**, a C++ class that wraps the FMOD Core API and is updated every frame from `DoPostFramePulse()`. This tight per-frame update ensures that all 3D listener positions, channel velocities, and DSP parameter changes are applied in sync with the game loop.
-
-The coordinate system is configured in **right-handed mode with Z up and Y north**, matching GTA:SA's native world axes. This means 3D sound positions and velocity vectors you pass from Lua map directly to in-game world coordinates — no manual axis remapping required.
-
-**Per-resource tracking** is built in: every sound created inside a resource is registered against that resource's lifetime. When the resource stops (intentionally or due to an error), all FMOD sounds belonging to it are automatically freed, preventing audio leaks across session boundaries.
+The `fmod*` Lua globals give you direct access to the FMOD Core API from any client-side script. Sounds are loaded with `fmodCreateSound` or `fmodCreateStream`, played with `fmodPlaySound`, and controlled through the returned channel handle. 3D sound positions use GTA:SA world coordinates directly — no axis remapping required. Per-resource tracking means every sound created inside a resource is automatically freed when that resource stops, so you will never leak audio across session boundaries.
 
 ## Compatibility
 

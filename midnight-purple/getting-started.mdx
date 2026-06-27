@@ -1,7 +1,7 @@
 ---
-title: "Get Started with Midnight Purple SA FMOD Audio"
+title: "Midnight Purple SA: FMOD Scripting Quick-Start Guide"
 sidebarTitle: "Getting Started"
-description: "Learn how to use the fmod* Lua globals in Midnight Purple SA to load sounds, control playback, and apply 3D positioning and effects in your MTA:SA resource."
+description: "Step-by-step guide to loading sounds, controlling playback, applying 3D positioning, and routing audio categories in Midnight Purple SA Lua scripts."
 ---
 
 This guide walks you through the essentials of the Midnight Purple SA FMOD audio system: loading sound assets, triggering playback, applying 3D world-space positioning, adjusting volume, and routing channels into the correct audio category. By the end you'll have a working pattern you can drop into any client-side MTA:SA resource script.
@@ -19,7 +19,8 @@ This guide walks you through the essentials of the Midnight Purple SA FMOD audio
     ```lua
     local soundId = fmodCreateSound("sounds/engine.wav", false, false)
     if not soundId then
-      outputDebugString("[FMOD] Failed to create sound: " .. tostring(fmodGetLastError()))
+      local errCode, errStr = fmodGetLastError()
+      outputDebugString("[FMOD] Failed to create sound: " .. tostring(errCode) .. " - " .. tostring(errStr))
       return
     end
     ```
@@ -31,7 +32,8 @@ This guide walks you through the essentials of the Midnight Purple SA FMOD audio
     ```lua
     local channelId = fmodPlaySound(soundId)
     if not channelId then
-      outputDebugString("[FMOD] Playback failed")
+      local errCode, errStr = fmodGetLastError()
+      outputDebugString("[FMOD] Playback failed: " .. tostring(errCode) .. " - " .. tostring(errStr))
       return
     end
     ```
@@ -60,7 +62,7 @@ This guide walks you through the essentials of the Midnight Purple SA FMOD audio
 
 ## Playing a 3D Spatial Sound
 
-Pass `true` as the second argument to `fmodCreateSound` to enable 3D mode, then supply world-space coordinates and min/max audibility distances when calling `fmodPlaySound`. Positions use GTA:SA axes directly — no remapping needed.
+Pass `true` as the second argument to `fmodCreateSound` to enable 3D mode, then supply world-space coordinates and min/max audibility distances when calling `fmodPlaySound`. Positions use GTA:SA world axes directly — no remapping needed, and the audio listener tracks the local player's position automatically.
 
 ```lua
 -- Load as 3D sound
@@ -71,8 +73,6 @@ local soundId = fmodCreateSound("sounds/explosion.wav", true, false)
 -- maxDistance=80 (inaudible beyond 80 units)
 local channelId = fmodPlaySound(soundId, 100, 200, 10, 5, 80)
 ```
-
-The FMOD listener position is updated every frame from `DoPostFramePulse()`, so the sound will attenuate and pan correctly as the local player moves through the world.
 
 ## Streaming Long Audio Files
 

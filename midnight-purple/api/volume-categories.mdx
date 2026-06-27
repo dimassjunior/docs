@@ -32,7 +32,7 @@ fmodSetChannelCategory(musicCh, "music")
 
 ### `fmodSetCategoryVolume(category, volume)`
 
-Scale all channels in a category simultaneously. Changing the category volume is non-destructive — per-channel volumes set by `fmodSetChannelVolume` are preserved and multiplied on top of the category scalar.
+Scale all channels in a category simultaneously. Changing the category volume is non-destructive — per-channel volumes set by `fmodSetSoundVolume` are preserved and multiplied on top of the category scalar.
 
 **Parameters**
 
@@ -63,13 +63,18 @@ Read back the current volume scalar for a category.
 
 **Returns** `number` — current volume scalar for the category.
 
+```lua
+local musicVol = fmodGetCategoryVolume("music")
+outputChatBox("Music category volume: " .. tostring(musicVol))
+```
+
 ---
 
 ## Master Volume
 
 ### `fmodSetMasterVolume(volume)`
 
-Scale all FMOD sounds together by adjusting the FMOD master `ChannelGroup`. This is independent of MTA's native BASS audio pipeline — it will not affect any non-FMOD sounds playing in the server.
+Scale all FMOD sounds together. This is independent of MTA's native BASS audio pipeline — it will not affect any non-FMOD sounds playing in the server.
 
 **Parameters**
 
@@ -90,6 +95,11 @@ fmodSetMasterVolume(0.8)
 Read back the current FMOD master volume scalar.
 
 **Returns** `number` — current master volume scalar.
+
+```lua
+local masterVol = fmodGetMasterVolume()
+outputChatBox("Master volume: " .. tostring(masterVol))
+```
 
 ---
 
@@ -115,7 +125,7 @@ Return the last FMOD result code and its human-readable description. Call this i
 
 | Position | Type    | Description                               |
 | -------- | ------- | ----------------------------------------- |
-| 1        | integer | FMOD result code (`FMOD_RESULT` enum value). |
+| 1        | integer | FMOD result code.                         |
 | 2        | string  | Human-readable description of the error.  |
 
 ```lua
