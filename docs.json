@@ -46,38 +46,7 @@
           {
             "group": "Projects",
             "pages": [
-              "projects/overview",
-              "projects/midnight-purple-sa"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Midnight Purple SA",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "midnight-purple/introduction",
-              "midnight-purple/getting-started",
-              "midnight-purple/roadmap"
-            ]
-          },
-          {
-            "group": "Lua API",
-            "pages": [
-              "midnight-purple/api/sound-lifetime",
-              "midnight-purple/api/playback",
-              "midnight-purple/api/channel-control",
-              "midnight-purple/api/reverb-dsp",
-              "midnight-purple/api/volume-categories"
-            ]
-          },
-          {
-            "group": "Building",
-            "pages": [
-              "midnight-purple/build/windows",
-              "midnight-purple/build/linux"
+              "projects/overview"
             ]
           }
         ]
