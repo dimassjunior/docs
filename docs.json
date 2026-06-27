@@ -1,72 +1,87 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mintlify Starter Kit",
-  "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
-  },
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "pages": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
+  "name": "Dimas Jr.",
+  "theme": "luma",
+  "favicon": "https://media.brand.dev/8795d498-b221-4203-bee1-ecd0701a79a3.svg",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "https://media.brand.dev/5dd865e8-2f0f-496e-adf4-3643ba33e616.svg",
+    "dark": "https://media.brand.dev/5dd865e8-2f0f-496e-adf4-3643ba33e616.svg"
+  },
+  "colors": {
+    "primary": "#64dcfc",
+    "light": "#8727fc",
+    "dark": "#8c51fc"
+  },
+  "appearance": {
+    "default": "dark"
+  },
+  "fonts": {
+    "heading": {
+      "family": "Inter"
+    },
+    "body": {
+      "family": "Inter"
+    }
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
     "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.mintlify.com"
+      "type": "github",
+      "href": "https://github.com/dimasjnior"
     }
   },
-  "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Portfolio",
+        "groups": [
+          {
+            "group": "About",
+            "pages": [
+              "introduction",
+              "experience",
+              "skills",
+              "contact"
+            ]
+          },
+          {
+            "group": "Projects",
+            "pages": [
+              "projects/overview",
+              "projects/midnight-purple-sa"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Midnight Purple SA",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "midnight-purple/introduction",
+              "midnight-purple/getting-started",
+              "midnight-purple/roadmap"
+            ]
+          },
+          {
+            "group": "Lua API",
+            "pages": [
+              "midnight-purple/api/sound-lifetime",
+              "midnight-purple/api/playback",
+              "midnight-purple/api/channel-control",
+              "midnight-purple/api/reverb-dsp",
+              "midnight-purple/api/volume-categories"
+            ]
+          },
+          {
+            "group": "Building",
+            "pages": [
+              "midnight-purple/build/windows",
+              "midnight-purple/build/linux"
+            ]
+          }
+        ]
+      }
     ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
   }
 }

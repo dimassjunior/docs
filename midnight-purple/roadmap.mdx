@@ -1,0 +1,53 @@
+---
+title: "Midnight Purple SA Roadmap & Completed Features"
+sidebarTitle: "Roadmap"
+description: "Full list of completed and planned features for Midnight Purple SA, including Doppler, streaming audio, DSP effects, vehicle audio, and occlusion."
+---
+
+Midnight Purple SA has grown from a minimal FMOD integration into a full-featured spatial audio system covering DSP effect chains, per-vehicle sound simulation, raycasted occlusion, and server-driven playback sync. The sections below catalogue every feature that has shipped in the current build, grouped by subsystem.
+
+<Note>
+  All listed features are fully implemented in the current build. The version label in-game reads **Midnight Purple 1.7** (upstream base synced 2026-05-16).
+</Note>
+
+## Completed Features
+
+### Core Audio
+
+- ✅ **Doppler effect** — `fmodSetSoundVelocity` sets a channel's velocity vector so FMOD calculates pitch shift automatically based on relative motion between source and listener
+- ✅ **Pause / resume** — channels can be individually paused and resumed via `fmodSetChannelPaused`
+- ✅ **Streaming** — `fmodCreateStream` for music and long-form audio with low RAM overhead
+- ✅ **Loop state toggle** — loop mode can be enabled or disabled on a live channel without restarting playback
+- ✅ **Read-back functions** — `fmodGetSoundVolume`, `fmodGetSoundPitch`, and equivalent getters for all major channel parameters
+- ✅ **Per-resource sound tracking** — sounds are automatically freed when the owning resource stops, with no manual cleanup required
+- ✅ **FMOD error propagation** — all `fmod*` functions return `false` on failure; `fmodGetLastError()` returns the FMOD error code and description
+- ✅ **`fmodGetVersion()`** — returns the linked FMOD library version string at runtime
+
+### DSP & Effects
+
+- ✅ **Additional DSP types** — low-pass, high-pass, flanger, chorus, and distortion effect nodes available via `fmodAddChannelEffect`
+- ✅ **DSP chain query** — `fmodGetChannelEffects` returns the ordered list of DSP nodes currently applied to a channel
+- ✅ **Volume categories** — SFX, Ambient, and Music sub-groups under the Master ChannelGroup; per-category volume control via `fmodSetCategoryVolume`
+
+### Network & Sync
+
+- ✅ **Server-triggered playback** — the bundled `fmod_sync` resource allows server-side scripts to trigger FMOD sounds on clients using a client-side cache; no raw file paths are sent over the network
+
+### Spatial Audio
+
+- ✅ **Occlusion / obstruction** — `fmodSetChannelOcclusion` applies geometry-based attenuation and muffling to a channel, accepting direct and reverb occlusion factors
+- ✅ **Air-absorption LPF** — a distance-proportional low-pass filter is applied automatically to 3D sounds beyond 20 m, simulating atmospheric high-frequency rolloff
+
+### Vehicle Audio
+
+- ✅ **Engine sound layer** — the `hikari_Engine` sound is routed through FMOD, enabling pitch and DSP manipulation tied to RPM
+- ✅ **Per-vehicle sound bank** — `engine_table.lua` maps vehicle model IDs to custom FMOD sound assets, allowing fully unique engine audio per vehicle
+- ✅ **Rev limiter / gear shift events** — BOV (blow-off valve) and backfire / anti-lag system (ALS) sounds are triggered on gear change and rev-limiter hit events
+- ✅ **Exhaust 3D positioning** — the exhaust sound channel's 3D position is updated each frame to match the vehicle's exhaust bone in world space
+- ✅ **Tunnel echo & reverb** — a raycast-based detection system applies tunnel reverb presets when the vehicle is inside a tunnel or underpass
+- ✅ **Rev limiter distortion** — a DSP distortion node is blended in on the engine channel as RPM approaches and holds the rev limiter
+- ✅ **Per-vehicle occlusion** — a throttled line-of-sight raycast (fired at most once every 200 ms per vehicle) drives `fmodSetChannelOcclusion` for other players' vehicles, muffling sound through solid geometry
+
+### Miscellaneous
+
+- ✅ **Version label** — in-game version string updated to **Midnight Purple 1.7**

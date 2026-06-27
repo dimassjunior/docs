@@ -1,0 +1,168 @@
+---
+title: "Playback Control — fmodPlaySound, fmodStopSound API"
+sidebarTitle: "Playback"
+description: "Lua API reference for FMOD playback in Midnight Purple SA. Covers fmodPlaySound, fmodStopSound, fmodPauseSound, fmodResumeSound, and state-query functions."
+---
+
+This page covers playback control functions — spawning channels from loaded sounds, stopping, pausing, resuming, and querying playback state. All functions are available client-side. Channel IDs are plain integers managed by `CFMODManager` and are invalidated once the channel finishes or is stopped. All functions return `false` on failure; use `fmodGetLastError()` to retrieve the error code and description.
+
+---
+
+## fmodPlaySound
+
+```lua
+fmodPlaySound(soundId, [x, y, z, [minDist=1, maxDist=100]])
+```
+
+Spawn a playing instance of a loaded sound asset. Each call produces an independent channel, allowing the same sound to be played multiple times simultaneously. If world-space coordinates are provided the channel is spatialized at that position; omit them entirely for a 2D (non-spatialized) channel.
+
+<ParamField path="soundId" type="integer" required>
+  The sound ID returned by `fmodCreateSound`, `fmodCreateStream`, or `fmodCreateSoundFromMemory`.
+</ParamField>
+
+<ParamField path="x" type="number">
+  World X coordinate for 3D spatialization. Must be provided together with `y` and `z`.
+</ParamField>
+
+<ParamField path="y" type="number">
+  World Y coordinate for 3D spatialization.
+</ParamField>
+
+<ParamField path="z" type="number">
+  World Z coordinate for 3D spatialization.
+</ParamField>
+
+<ParamField path="minDist" type="number" default="1">
+  The distance at which the sound begins to attenuate. Below this distance the volume is at its maximum.
+</ParamField>
+
+<ParamField path="maxDist" type="number" default="100">
+  The distance at which the sound reaches its minimum audible volume.
+</ParamField>
+
+<ResponseField name="channelId" type="integer | false">
+  An integer channel ID managed by `CFMODManager`, or `false` on failure.
+</ResponseField>
+
+**2D (non-spatialized) example:**
+
+```lua
+local ch = fmodPlaySound(soundId)
+fmodSetSoundVolume(ch, 0.9)
+```
+
+**3D (spatialized) example:**
+
+```lua
+local ch = fmodPlaySound(soundId, playerX, playerY, playerZ, 3, 50)
+```
+
+---
+
+## fmodStopSound
+
+```lua
+fmodStopSound(channelId)
+```
+
+Stop a channel immediately and release it. The channel ID is invalidated after this call and must not be reused.
+
+<ParamField path="channelId" type="integer" required>
+  The channel ID returned by `fmodPlaySound`.
+</ParamField>
+
+<ResponseField name="result" type="bool">
+  `true` on success, `false` on failure.
+</ResponseField>
+
+```lua
+fmodStopSound(ch)
+```
+
+---
+
+## fmodPauseSound
+
+```lua
+fmodPauseSound(channelId)
+```
+
+Pause a channel without releasing it. The channel ID remains valid and the channel can be resumed later with [`fmodResumeSound`](#fmodresumesound). The playback position is preserved.
+
+<ParamField path="channelId" type="integer" required>
+  The channel ID returned by `fmodPlaySound`.
+</ParamField>
+
+<ResponseField name="result" type="bool">
+  `true` on success, `false` on failure.
+</ResponseField>
+
+---
+
+## fmodResumeSound
+
+```lua
+fmodResumeSound(channelId)
+```
+
+Resume a previously paused channel from where it left off. Has no effect if the channel is already playing.
+
+<ParamField path="channelId" type="integer" required>
+  The channel ID of a paused channel.
+</ParamField>
+
+<ResponseField name="result" type="bool">
+  `true` on success, `false` on failure.
+</ResponseField>
+
+---
+
+## fmodIsSoundPaused
+
+```lua
+fmodIsSoundPaused(channelId)
+```
+
+Query whether a channel is currently paused.
+
+<ParamField path="channelId" type="integer" required>
+  The channel ID to query.
+</ParamField>
+
+<ResponseField name="result" type="bool">
+  `true` if the channel is paused, `false` otherwise (including on failure).
+</ResponseField>
+
+---
+
+## fmodIsSoundPlaying
+
+```lua
+fmodIsSoundPlaying(channelId)
+```
+
+Query whether a channel is still active and not paused. Returns `false` for channels that have finished playing and been cleaned up, making this safe to use as a validity guard.
+
+<ParamField path="channelId" type="integer" required>
+  The channel ID to query.
+</ParamField>
+
+<ResponseField name="result" type="bool">
+  `true` if the channel is active and playing, `false` if it is paused, finished, or invalid.
+</ResponseField>
+
+---
+
+**Combined pause / resume example:**
+
+```lua
+if fmodIsSoundPlaying(engineChannel) then
+  fmodPauseSound(engineChannel)
+elseif fmodIsSoundPaused(engineChannel) then
+  fmodResumeSound(engineChannel)
+end
+```
+
+<Tip>
+  Use `fmodIsSoundPlaying` to guard against operating on finished channels. Channels are automatically cleaned up each frame when they finish playing — reading a stale channel ID is safe (it returns `false`) but calling mutating functions on one is a no-op that will set an error retrievable via `fmodGetLastError()`.
+</Tip>

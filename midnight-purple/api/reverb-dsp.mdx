@@ -1,0 +1,317 @@
+---
+title: "Environmental Reverb & DSP Effects — FMOD Lua API"
+sidebarTitle: "Reverb & DSP"
+description: "Lua API reference for FMOD reverb presets, wet levels, channel reverb, echo, low-pass, high-pass, flanger, chorus, and distortion effects in Midnight Purple SA."
+---
+
+This page covers environmental reverb and per-channel DSP effects. Reverb presets simulate real-world acoustic environments; DSP effects shape individual channel audio independently, giving you fine-grained control over the sonic character of every sound in your script.
+
+---
+
+## Environmental Reverb
+
+### `fmodSetReverbPreset(preset)`
+
+Set the global reverb environment. The preset affects all channels that have been opted in via [`fmodSetChannelReverb`](#fmodsetchannekreverb-channelid-wetdb).
+
+**Parameters**
+
+| Name     | Type   | Description                         |
+| -------- | ------ | ----------------------------------- |
+| `preset` | string | One of the 23 preset names (below). |
+
+**Available Presets**
+
+| Preset          | Preset          | Preset          |
+| --------------- | --------------- | --------------- |
+| `"off"`         | `"alley"`       | `"hallway"`     |
+| `"generic"`     | `"forest"`      | `"stoneroom"`   |
+| `"room"`        | `"mountains"`   | `"auditorium"`  |
+| `"bathroom"`    | `"plain"`       | `"concerthall"` |
+| `"cave"`        | `"sewerpipe"`   | `"arena"`       |
+| `"city"`        | `"underwater"`  | `"hangar"`      |
+| `"parkinglot"`  | `"paddedcell"`  | `"livingroom"`  |
+| `"stonecorridor"` | `"quarry"`    |                 |
+
+**Returns** `bool` — `true` on success, `false` on failure.
+
+```lua
+-- Set cave reverb when player enters a cave
+fmodSetReverbPreset("cave")
+
+-- Disable reverb in open areas
+fmodSetReverbPreset("off")
+```
+
+---
+
+### `fmodSetReverbWetLevel(wetDB)`
+
+Override the reverb output level in decibels without changing the preset character. Useful for smoothly fading reverb in and out during environment transitions.
+
+**Parameters**
+
+| Name    | Type   | Range        | Description                               |
+| ------- | ------ | ------------ | ----------------------------------------- |
+| `wetDB` | number | −80 to +20   | Reverb send level in decibels.            |
+
+**Returns** `bool` — `true` on success, `false` on failure.
+
+```lua
+fmodSetReverbWetLevel(-10)  -- quieter reverb tail
+```
+
+---
+
+### `fmodSetChannelReverb(channelId, wetDB)`
+
+Connect a channel to the global reverb bus. Channels are dry by default; you must call this to opt a channel into reverb processing. The `wetDB` value controls how strongly that channel feeds into the reverb.
+
+**Parameters**
+
+| Name        | Type    | Description                                    |
+| ----------- | ------- | ---------------------------------------------- |
+| `channelId` | integer | The channel handle returned by `fmodPlaySound`. |
+| `wetDB`     | number  | Reverb send level in decibels (−80 to +20).    |
+
+**Returns** `bool` — `true` on success, `false` on failure.
+
+```lua
+fmodSetReverbPreset("arena")
+fmodSetChannelReverb(footstepCh, -6)  -- opt this channel into reverb
+```
+
+---
+
+## DSP Effects
+
+<Note>
+  DSP effects are additive — you can stack multiple effects on a single channel. Use [`fmodGetChannelEffects`](#fmodgetchanneleffects-channelid) to inspect the current DSP chain.
+</Note>
+
+---
+
+### `fmodSetChannelEcho(channelId, delayMS, feedbackPct, wetDB)`
+
+Attach or update an echo/delay effect on the specified channel.
+
+**Parameters**
+
+| Name          | Type    | Description                                            |
+| ------------- | ------- | ------------------------------------------------------ |
+| `channelId`   | integer | Target channel handle.                                 |
+| `delayMS`     | number  | Echo delay in milliseconds.                            |
+| `feedbackPct` | number  | Echo repetition amount, 0–100%.                        |
+| `wetDB`       | number  | Effect output level in dB.                             |
+
+**Returns** `bool`
+
+```lua
+fmodSetChannelEcho(voiceCh, 300, 40, -6)  -- 300ms echo with 40% feedback
+```
+
+---
+
+### `fmodRemoveChannelEcho(channelId)`
+
+Remove the echo DSP from the specified channel.
+
+**Parameters**
+
+| Name        | Type    | Description            |
+| ----------- | ------- | ---------------------- |
+| `channelId` | integer | Target channel handle. |
+
+**Returns** `bool`
+
+---
+
+### `fmodSetChannelLowPass(channelId, cutoffHz [, resonance])`
+
+Attenuate frequencies above `cutoffHz`. Useful for distance muffle or simulating sounds heard through walls and interiors.
+
+**Parameters**
+
+| Name        | Type    | Default | Description                                                              |
+| ----------- | ------- | ------- | ------------------------------------------------------------------------ |
+| `channelId` | integer | —       | Target channel handle.                                                   |
+| `cutoffHz`  | number  | —       | Filter cutoff frequency in Hz.                                           |
+| `resonance` | number  | `1.0`   | `1.0` = flat response; higher values create a resonant peak near cutoff. |
+
+**Returns** `bool`
+
+```lua
+fmodSetChannelLowPass(engineCh, 800)  -- muffle engine at distance
+```
+
+---
+
+### `fmodRemoveChannelLowPass(channelId)`
+
+Remove the low-pass filter from the specified channel.
+
+**Parameters**
+
+| Name        | Type    | Description            |
+| ----------- | ------- | ---------------------- |
+| `channelId` | integer | Target channel handle. |
+
+**Returns** `bool`
+
+---
+
+### `fmodSetChannelHighPass(channelId, cutoffHz [, resonance])`
+
+Attenuate frequencies below `cutoffHz`. Use this to thin out low end, simulate radio or telephone audio, or strip rumble from ambient loops.
+
+**Parameters**
+
+| Name        | Type    | Default | Description                                                              |
+| ----------- | ------- | ------- | ------------------------------------------------------------------------ |
+| `channelId` | integer | —       | Target channel handle.                                                   |
+| `cutoffHz`  | number  | —       | Filter cutoff frequency in Hz.                                           |
+| `resonance` | number  | `1.0`   | `1.0` = flat response; higher values create a resonant peak near cutoff. |
+
+**Returns** `bool`
+
+```lua
+fmodSetChannelHighPass(radioCh, 300)  -- thin out low end
+```
+
+---
+
+### `fmodRemoveChannelHighPass(channelId)`
+
+Remove the high-pass filter from the specified channel.
+
+**Parameters**
+
+| Name        | Type    | Description            |
+| ----------- | ------- | ---------------------- |
+| `channelId` | integer | Target channel handle. |
+
+**Returns** `bool`
+
+---
+
+### `fmodSetChannelFlanger(channelId, mix, depth, rate)`
+
+Apply a cyclic phase-modulation (flanger) effect. Creates a sweeping comb-filter characteristic by mixing a slightly delayed, modulated copy of the signal back in.
+
+**Parameters**
+
+| Name        | Type    | Range      | Description                                 |
+| ----------- | ------- | ---------- | ------------------------------------------- |
+| `channelId` | integer | —          | Target channel handle.                      |
+| `mix`       | number  | 0–100      | Wet/dry mix percentage.                     |
+| `depth`     | number  | 0.01–1.0   | Modulation depth.                           |
+| `rate`      | number  | 0–20       | Modulation rate in Hz.                      |
+
+**Returns** `bool`
+
+```lua
+fmodSetChannelFlanger(ch, 50, 0.5, 0.5)
+```
+
+---
+
+### `fmodRemoveChannelFlanger(channelId)`
+
+Remove the flanger DSP from the specified channel.
+
+**Parameters**
+
+| Name        | Type    | Description            |
+| ----------- | ------- | ---------------------- |
+| `channelId` | integer | Target channel handle. |
+
+**Returns** `bool`
+
+---
+
+### `fmodSetChannelChorus(channelId, mix, depth, rate)`
+
+Apply a pitch-varied doubling (chorus) effect. Adds warmth and width by layering slightly detuned copies of the signal.
+
+**Parameters**
+
+| Name        | Type    | Range  | Description                     |
+| ----------- | ------- | ------ | ------------------------------- |
+| `channelId` | integer | —      | Target channel handle.          |
+| `mix`       | number  | 0–100  | Wet/dry mix percentage.         |
+| `depth`     | number  | 0–100  | Pitch modulation depth.         |
+| `rate`      | number  | 0–20   | Modulation rate in Hz.          |
+
+**Returns** `bool`
+
+```lua
+fmodSetChannelChorus(vocalCh, 60, 30, 1.2)
+```
+
+---
+
+### `fmodRemoveChannelChorus(channelId)`
+
+Remove the chorus DSP from the specified channel.
+
+**Parameters**
+
+| Name        | Type    | Description            |
+| ----------- | ------- | ---------------------- |
+| `channelId` | integer | Target channel handle. |
+
+**Returns** `bool`
+
+---
+
+### `fmodSetChannelDistortion(channelId, level)`
+
+Apply hard-clipping saturation to the channel. At low values this adds subtle warmth; at high values it produces aggressive overdrive.
+
+**Parameters**
+
+| Name        | Type    | Range    | Description                                  |
+| ----------- | ------- | -------- | -------------------------------------------- |
+| `channelId` | integer | —        | Target channel handle.                       |
+| `level`     | number  | 0.0–1.0  | `0.0` = clean signal, `1.0` = full clipping. |
+
+**Returns** `bool`
+
+```lua
+fmodSetChannelDistortion(engineCh, 0.3)  -- slight overdrive
+```
+
+---
+
+### `fmodRemoveChannelDistortion(channelId)`
+
+Remove the distortion DSP from the specified channel.
+
+**Parameters**
+
+| Name        | Type    | Description            |
+| ----------- | ------- | ---------------------- |
+| `channelId` | integer | Target channel handle. |
+
+**Returns** `bool`
+
+---
+
+### `fmodGetChannelEffects(channelId)`
+
+Query the active DSP chain for a channel. Returns a comma-separated string of the effect names currently attached, or `false` if the channel is invalid or an error occurred.
+
+**Parameters**
+
+| Name        | Type    | Description            |
+| ----------- | ------- | ---------------------- |
+| `channelId` | integer | Target channel handle. |
+
+**Returns** `string` (e.g. `"Echo,LowPass"`) or `false` on error.
+
+```lua
+local effects = fmodGetChannelEffects(ch)
+if effects then
+  outputDebugString("Active effects: " .. effects)
+end
+```

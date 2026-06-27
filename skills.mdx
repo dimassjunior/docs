@@ -1,0 +1,89 @@
+---
+title: "Skills & Technologies — Dimas Jr.'s Stack"
+sidebarTitle: "Skills"
+description: "Full list of programming languages, frameworks, tools, and platforms Dimas Jr. works with — from C++ and Lua to React, TypeScript, and FMOD."
+---
+
+A developer's stack is never truly finished — it grows with every project, every problem, and every late-night debugging session. Below is a snapshot of the languages, frameworks, tools, and platforms I work with regularly, along with some context on how I use each one.
+
+<CardGroup cols={2}>
+  <Card title="Languages" icon="terminal">
+    **C++**, **Lua**, **TypeScript**, **JavaScript** — from systems-level engine code to game scripting to type-safe web applications.
+  </Card>
+  <Card title="Frontend" icon="browser">
+    **React 18**, **Vite**, **CSS Modules**, **React Router**, **Anime.js v4**, **i18next** — modern, fast, internationalised web interfaces.
+  </Card>
+  <Card title="Systems & Audio" icon="microchip">
+    **FMOD Core SDK**, **BASS audio**, **MTA:SA / GTA:SA modding** — low-level audio pipeline integration and game engine modification.
+  </Card>
+  <Card title="Tooling" icon="wrench">
+    **Git**, **Visual Studio 2022**, **DirectX SDK**, **Linux build tools** — the full development and build environment across platforms.
+  </Card>
+</CardGroup>
+
+---
+
+## Languages
+
+### C++
+My primary language for systems and game programming. I use C++ for engine modifications, native library integration (FMOD, DirectX), DLL injection, and performance-critical subsystems. Comfortable with modern C++17/20 features — smart pointers, lambdas, structured bindings, and constexpr patterns — while also navigating legacy codebases that predate those standards.
+
+### Lua
+My scripting language of choice for game logic and engine bindings. I've written Lua APIs that expose complex C++ systems to game developers, built full game-mode scripts for MTA:SA servers, and designed Lua modules that are both powerful and approachable for non-C++ developers in the modding community.
+
+### TypeScript
+My default for any web project. TypeScript's type system lets me design interfaces before writing implementations, catch integration errors at compile time, and refactor large codebases with confidence. I use strict mode and avoid `any` as a matter of principle.
+
+### JavaScript
+Foundational knowledge that underpins all my TypeScript and Node.js work. I understand the runtime model well — event loop, closures, prototype chain, async/await internals — which makes debugging compiled TypeScript output straightforward.
+
+---
+
+## Frontend
+
+### React 18
+Component-driven UI development with hooks, context, and Suspense. I follow a composition-first approach — small, focused components that are easy to test and reuse. Familiar with the React 18 concurrent features and their practical implications for rendering performance.
+
+### Vite
+My build tool of choice. Vite's near-instant HMR and ES module-first dev server make it a joy to work with. I've configured custom Vite plugins for asset transforms, environment variable injection, and multi-entry builds.
+
+### CSS Modules
+Scoped, predictable styles that scale. CSS Modules eliminate the class-name collision problems that plague large stylesheets, and pair naturally with TypeScript (via typed CSS module declarations). I use them alongside CSS custom properties for theming.
+
+### React Router
+Client-side routing with a focus on clean URL hierarchies and lazy-loaded route segments. I use the data router APIs for loader/action patterns that keep data-fetching colocated with the routes that need it.
+
+### Anime.js v4
+Declarative animation library for crafting fluid UI transitions and interactive feedback. I integrate Anime.js timelines with React refs and lifecycle hooks to create entrance animations, staggered list reveals, and scroll-driven effects — without sacrificing performance.
+
+### i18next
+Full internationalisation support for PT-BR and EN locales, with runtime language switching, ICU-style pluralisation, and namespace-based translation file organisation. I've built language switchers, RTL-aware layouts, and locale-specific date/number formatting on top of i18next.
+
+---
+
+## Systems & Audio
+
+### FMOD Core SDK
+The centrepiece of the Midnight Purple SA project. I've worked extensively with FMOD's C++ API — creating sound systems, managing channel groups and DSP chains, configuring 3D listener and emitter models, and setting up reverb zones that respond to the player's environment in real time.
+
+### BASS Audio
+Familiarity with the BASS audio library from working with MTA:SA's original audio pipeline. Understanding BASS was a prerequisite for knowing what to replace and how.
+
+### MTA:SA / GTA:SA Modding
+Years of experience navigating the MTA:San Andreas codebase — including its C++ core, the Lua scripting layer, the resource system, and the networking model. Comfortable reading disassembled GTA:SA code to understand undocumented engine behaviours.
+
+---
+
+## Tooling
+
+### Git
+Daily driver for version control. Comfortable with branching strategies, interactive rebases, cherry-picks, and managing multi-remote workflows for open-source forks.
+
+### Visual Studio 2022
+Primary IDE for C++ development on Windows. Proficient with the MSVC toolchain, project property sheets, linker configuration, and the Visual Studio debugger for both native and mixed-mode debugging.
+
+### DirectX SDK
+Experience with DirectX integration in the context of GTA:SA / MTA:SA modding — hooking into the D3D device, managing render state, and coordinating with the game's rendering pipeline for audio-visual synchronisation.
+
+### Linux Build Tools
+Familiarity with GCC/Clang toolchains, Makefiles, and CMake for server-side C++ components and cross-platform build configurations.

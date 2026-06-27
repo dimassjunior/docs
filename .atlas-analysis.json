@@ -1,0 +1,100 @@
+{
+  "projectType": "general",
+  "projectName": "Dimas Jr. — Portfolio & Projects",
+  "projectDescription": "Personal portfolio and technical documentation hub showcasing professional experience and open-source projects.",
+  "theme": "luma",
+  "primaryColor": "#64dcfc",
+  "lightColor": "#8727fc",
+  "darkColor": "#8c51fc",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Portfolio",
+        "groups": [
+          {
+            "group": "About",
+            "pages": [
+              "introduction",
+              "experience",
+              "skills",
+              "contact"
+            ]
+          },
+          {
+            "group": "Projects",
+            "pages": [
+              "projects/overview",
+              "projects/midnight-purple-sa"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Midnight Purple SA",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "midnight-purple/introduction",
+              "midnight-purple/getting-started",
+              "midnight-purple/roadmap"
+            ]
+          },
+          {
+            "group": "Lua API",
+            "pages": [
+              "midnight-purple/api/sound-lifetime",
+              "midnight-purple/api/playback",
+              "midnight-purple/api/channel-control",
+              "midnight-purple/api/reverb-dsp",
+              "midnight-purple/api/volume-categories"
+            ]
+          },
+          {
+            "group": "Building",
+            "pages": [
+              "midnight-purple/build/windows",
+              "midnight-purple/build/linux"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Personal portfolio showcasing professional experience and skills",
+    "Project documentation for Midnight Purple SA (MTA:SA fork)",
+    "FMOD audio engine integration with advanced 3D audio, reverb, and DSP effects",
+    "Full Lua API reference for fmod* globals",
+    "Engine sound simulation and vehicle audio system",
+    "Multi-language internationalization (PT-BR and EN)"
+  ],
+  "publicApiSurface": [
+    "fmodCreateSound(path, [is3D], [loop])",
+    "fmodCreateStream(path, [is3D], [loop])",
+    "fmodCreateSoundFromMemory(data, [is3D], [loop])",
+    "fmodFreeSound(soundId)",
+    "fmodPlaySound(soundId, [x, y, z, [minDist, maxDist]])",
+    "fmodStopSound(channelId)",
+    "fmodPauseSound(channelId)",
+    "fmodResumeSound(channelId)",
+    "fmodSetSoundVolume(channelId, volume)",
+    "fmodSetSoundPitch(channelId, pitch)",
+    "fmodSetSoundPosition(channelId, x, y, z)",
+    "fmodSetSoundVelocity(channelId, vx, vy, vz)",
+    "fmodSetReverbPreset(preset)",
+    "fmodSetChannelReverb(channelId, wetDB)",
+    "fmodSetChannelEcho(channelId, delayMS, feedbackPct, wetDB)",
+    "fmodSetChannelLowPass(channelId, cutoffHz, [resonance])",
+    "fmodSetChannelHighPass(channelId, cutoffHz, [resonance])",
+    "fmodSetChannelFlanger(channelId, mix, depth, rate)",
+    "fmodSetChannelChorus(channelId, mix, depth, rate)",
+    "fmodSetChannelDistortion(channelId, level)",
+    "fmodSetChannelOcclusion(channelId, directOcclusion, [reverbOcclusion])",
+    "fmodSetChannelCategory(channelId, category)",
+    "fmodSetCategoryVolume(category, volume)",
+    "fmodSetMasterVolume(volume)",
+    "fmodGetVersion()",
+    "fmodGetLastError()"
+  ]
+}

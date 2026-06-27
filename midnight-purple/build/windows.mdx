@@ -1,0 +1,97 @@
+---
+title: "Build Midnight Purple SA on Windows"
+sidebarTitle: "Windows Build"
+description: "Step-by-step guide to building Midnight Purple SA on Windows using Visual Studio 2022, DirectX SDK, and the FMOD Core SDK for the Win32 Release target."
+---
+
+Midnight Purple SA can be built from source on Windows using Visual Studio 2022. This guide walks you through installing the required dependencies — including the FMOD Core SDK unique to this fork — generating the project solution, and producing a Win32 Release build.
+
+## Prerequisites
+
+Before you begin, make sure the following are installed on your system:
+
+- **Visual Studio 2022** with the **Desktop development with C++** workload and the **C++ MFC for latest v145 build tools** individual component
+- **Microsoft DirectX SDK — June 2010** ([download from Microsoft](https://www.microsoft.com/en-us/download/details.aspx?id=6812))
+- **Git for Windows** *(optional — for cloning the repository)*
+- **FMOD Core SDK (x86)** — required specifically for this fork ([fmod.com](https://www.fmod.com/download))
+
+<Warning>
+  The FMOD Core SDK is required **in addition** to the standard MTA:SA build dependencies. It must be placed at `vendor\fmod\` inside the repository root, with headers at `vendor\fmod\inc\` and x86 libraries at `vendor\fmod\lib\x86\`.
+</Warning>
+
+## FMOD SDK Setup
+
+Follow these steps to place the FMOD Core SDK where the build system expects it:
+
+1. Download the **FMOD Core SDK (x86)** from [fmod.com](https://www.fmod.com/download).
+2. Create the directory `vendor\fmod\` in the repository root.
+3. Copy the SDK header files into `vendor\fmod\inc\`.
+4. Copy the x86 library files (`.lib` / `.dll`) into `vendor\fmod\lib\x86\`.
+
+Your directory layout should look like this:
+
+```
+<repo root>
+└── vendor\
+    └── fmod\
+        ├── inc\        ← FMOD headers (.h)
+        └── lib\
+            └── x86\    ← FMOD x86 libraries (.lib / .dll)
+```
+
+## Build Steps
+
+<Steps>
+  <Step title="Generate the Visual Studio solution">
+    Run the project-generation script from the repository root:
+
+    ```bat
+    win-create-projects.bat
+    ```
+  </Step>
+
+  <Step title="Open the solution">
+    Open the generated solution file in Visual Studio 2022:
+
+    ```
+    Build\MTASA.sln
+    ```
+  </Step>
+
+  <Step title="Set the build target">
+    In the Visual Studio toolbar, set the **configuration** to **Release** and the **platform** to **Win32**.
+  </Step>
+
+  <Step title="Build the solution">
+    Press **Ctrl+Shift+B**, or navigate to **Build → Build Solution** and wait for the build to complete.
+  </Step>
+
+  <Step title="Install runtime data">
+    After a successful build, run the data-installation script to copy runtime files to the output directory:
+
+    ```bat
+    win-install-data.bat
+    ```
+  </Step>
+</Steps>
+
+## One-Line Build
+
+For CI pipelines or scripted builds, you can invoke the all-in-one build script directly:
+
+```bat
+win-build.bat Release Win32
+```
+
+The script accepts two positional arguments:
+
+| Argument | Options | Notes |
+|---|---|---|
+| Configuration | `Debug` \| `Release` | Use `Release` for production builds |
+| Platform | `Win32` \| `x64` | `x64` is **not** the primary tested target for client builds |
+
+## License
+
+<Info>
+  Source code is licensed under **GPLv3** unless otherwise specified. Grand Theft Auto and related trademarks are © Rockstar North 1997–2026. Multi Theft Auto is © the MTA team. This fork is an independent project.
+</Info>

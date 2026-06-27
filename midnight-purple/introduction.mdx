@@ -1,0 +1,65 @@
+---
+title: "Midnight Purple SA: Advanced FMOD Audio for MTA:SA"
+sidebarTitle: "Introduction"
+description: "Midnight Purple SA extends Multi Theft Auto: San Andreas with the FMOD audio engine, enabling 3D spatial audio, environmental reverb, DSP effects, and vehicle sound simulation via Lua."
+---
+
+Midnight Purple SA is an independent fork of Multi Theft Auto: San Andreas (MTA:SA) that layers the **FMOD Core API** on top of the existing BASS audio stack. Every existing MTA audio function — `playSound`, `playSound3D`, `setSoundVolume`, and the rest — continues to work exactly as before. FMOD is purely **additive**: a second, fully independent engine exposed through new `fmod*` Lua globals available on the client side, giving scripters access to advanced spatial audio, DSP effect chains, environmental reverb, and vehicle sound simulation without touching a single line of existing code.
+
+<Warning>
+  This fork is not affiliated with, endorsed by, or supported by the Multi Theft Auto team.
+</Warning>
+
+## FMOD Audio Engine
+
+The FMOD integration is managed by **CFMODManager**, a C++ class that wraps the FMOD Core API and is updated every frame from `DoPostFramePulse()`. This tight per-frame update ensures that all 3D listener positions, channel velocities, and DSP parameter changes are applied in sync with the game loop.
+
+The coordinate system is configured in **right-handed mode with Z up and Y north**, matching GTA:SA's native world axes. This means 3D sound positions and velocity vectors you pass from Lua map directly to in-game world coordinates — no manual axis remapping required.
+
+**Per-resource tracking** is built in: every sound created inside a resource is registered against that resource's lifetime. When the resource stops (intentionally or due to an error), all FMOD sounds belonging to it are automatically freed, preventing audio leaks across session boundaries.
+
+## Compatibility
+
+All existing MTA:SA scripts using the BASS-backed audio API continue to operate without any modification:
+
+| Existing Function | Status |
+|---|---|
+| `playSound` | ✅ Unchanged |
+| `playSound3D` | ✅ Unchanged |
+| `setSoundVolume` | ✅ Unchanged |
+| `setSoundPitch` | ✅ Unchanged |
+| `setSoundPaused` | ✅ Unchanged |
+| `stopSound` | ✅ Unchanged |
+| All other `sound*` functions | ✅ Unchanged |
+
+FMOD functions are entirely separate globals (`fmodCreateSound`, `fmodPlaySound`, etc.) and do not interfere with or replace any existing MTA audio functionality. You can freely mix BASS and FMOD sounds in the same resource.
+
+## Audio Channel Groups
+
+Midnight Purple SA organises FMOD output into a three-tier channel group hierarchy:
+
+```
+Master
+├── SFX      (default group for gameplay sounds)
+├── Ambient  (environment and background audio)
+└── Music    (music tracks and long-form audio)
+```
+
+Every FMOD channel is assigned to one of the three sub-groups (defaulting to **SFX** if none is specified). Volume can be controlled at the category level — muting or reducing the Music group, for example, has no effect on SFX or Ambient channels. The Master group acts as a global output volume above all three.
+
+## Quick Links
+
+<CardGroup cols={2}>
+  <Card title="Get Started" icon="rocket" href="/midnight-purple/getting-started">
+    Load your first sound, apply 3D positioning, and manage playback in a few lines of Lua.
+  </Card>
+  <Card title="Lua API" icon="code" href="/midnight-purple/api/sound-lifetime">
+    Full reference for every fmod* global: parameters, return values, and error handling.
+  </Card>
+  <Card title="Build" icon="hammer" href="/midnight-purple/build/windows">
+    Compile Midnight Purple SA from source on Windows.
+  </Card>
+  <Card title="Roadmap" icon="map" href="/midnight-purple/roadmap">
+    Completed features and the plan ahead for spatial audio, vehicle sounds, and more.
+  </Card>
+</CardGroup>
